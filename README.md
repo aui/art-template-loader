@@ -1,10 +1,11 @@
 # art-template-loader
-art-template loader for webpack
+
+[art-template](https://github.com/aui/art-template) loader for webpack
 
 ## Install
 
 ```
-npm install art-template-loader --save-dev
+npm install art-template-loader@0.3.0-beta1 --save-dev
 ```
 
 ## Usage
