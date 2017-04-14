@@ -18,8 +18,20 @@ module.exports = {
                 options: {
                     compressor: source => {
                         return source
-                            .replace(/\s+/g, ` `)
-                            .replace(/<!--[\w\W]*?-->/g, ``);
+                            // remove newline / carriage return
+                            .replace(/\n/g, "")
+
+                            // remove whitespace (space and tabs) before tags
+                            .replace(/[\t ]+\</g, "<")
+
+                            // remove whitespace between tags
+                            .replace(/\>[\t ]+\</g, "><")
+
+                            // remove whitespace after tags
+                            .replace(/\>[\t ]+$/g, ">")
+                            
+                            // remove comments
+                            .replace(/<!--[\w\W]*?-->/g, "");
                     }
                 }
             }]
