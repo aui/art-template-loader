@@ -1,0 +1,8 @@
+{{if user}}
+  <h2>{{user.name}}</h2>
+  <ul>
+    {{each user.tags}}
+        {{$value}}
+    {{/each}}
+  </ul>
+{{/if}}

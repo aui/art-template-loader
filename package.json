@@ -1,0 +1,31 @@
+{
+  "name": "art-template-loader",
+  "version": "0.3.0",
+  "description": "art-template loader for webpack",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "webpack && node test/dist/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aui/art-template-loader.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aui/art-template-loader/issues"
+  },
+  "homepage": "https://github.com/aui/art-template-loader#readme",
+  "engines": {
+      "node": ">= 4.0.0"
+  },
+  "dependencies": {
+    "loader-utils": "^1.1.0"
+  },
+  "peerDependencies": {
+    "art-template": "^4.0.0-beta1"
+  },
+  "devDependencies": {
+    "webpack": "^2.3.3"
+  }
+}
