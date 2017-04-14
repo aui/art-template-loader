@@ -16,6 +16,7 @@ module.exports = {
             use: [{
                 loader: 'art-template-loader',
                 options: {
+                    imports: require.resolve('./test/template-imports'),
                     compressor: source => {
                         return source
                             // remove newline / carriage return

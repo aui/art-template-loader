@@ -20,10 +20,13 @@
     "node": ">= 4.0.0"
   },
   "dependencies": {
+    "acorn": "^5.0.3",
+    "escodegen": "^1.8.1",
+    "estraverse": "^4.2.0",
     "loader-utils": "^1.1.0"
   },
   "peerDependencies": {
-    "art-template": "^4.0.0-beta2"
+    "art-template": ">=4.0.0-beta3"
   },
   "devDependencies": {
     "webpack": "^2.3.3"

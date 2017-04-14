@@ -7,3 +7,5 @@
     {{/each}}
   </ul>
 {{/if}}
+
+{{include './include.art'}}
