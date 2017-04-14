@@ -1,8 +1,9 @@
+<!--template-->
 {{if user}}
   <h2>{{user.name}}</h2>
   <ul>
     {{each user.tags}}
-        {{$value}}
+        <li>{{$value}}</li>
     {{/each}}
   </ul>
 {{/if}}
