@@ -23,7 +23,7 @@
     "loader-utils": "^1.1.0"
   },
   "peerDependencies": {
-    "art-template": "^4.0.0-beta1"
+    "art-template": "^4.0.0-beta2"
   },
   "devDependencies": {
     "webpack": "^2.3.3"
