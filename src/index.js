@@ -12,7 +12,7 @@ const loader = function (source) {
     loader.cacheable && loader.cacheable();
     const options = loaderUtils.getOptions(loader);
     const config = Object.assign({
-        imports: 'art-template/lib/imports',
+        imports: 'art-template/lib/template-imports',
         bail: true,
         cache: null,
         filename: loader.resourcePath
@@ -20,7 +20,7 @@ const loader = function (source) {
 
     if (typeof config.imports !== 'string') {
         throw Error(`art-template-loader: "options.imports" is a file path. Example:\n` +
-            `options: { imports: require.resolve("art-template/lib/imports") }\n`);
+            `options: { imports: require.resolve("art-template/lib/template-imports") }\n`);
     }
 
     const imports = 'var $imports = require(' +

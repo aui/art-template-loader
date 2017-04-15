@@ -1,10 +1,10 @@
 {
   "name": "art-template-loader",
-  "version": "0.3.0-beta3",
+  "version": "0.3.0-beta4",
   "description": "art-template loader for webpack",
   "main": "src/index.js",
   "scripts": {
-    "test": "webpack --config test/webpack.config.js && node test/dist/test.js"
+    "test": "webpack --config example/webpack.config.js && node example/dist/test.js"
   },
   "repository": {
     "type": "git",
@@ -26,7 +26,7 @@
     "loader-utils": "^1.1.0"
   },
   "peerDependencies": {
-    "art-template": ">=4.0.0-beta3"
+    "art-template": ">=4.0.0-beta4"
   },
   "devDependencies": {
     "webpack": "^2.3.3"
