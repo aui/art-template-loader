@@ -13,6 +13,6 @@
 
 <%
   include('include.art', {
-    data: {}
+    user: {name: 'world'}
   });
 %>

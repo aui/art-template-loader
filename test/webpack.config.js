@@ -2,10 +2,10 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        'test': './test/index.js'
+        'test': path.join(__dirname, 'index.js')
     },
     output: {
-        path: path.join(__dirname, 'test', 'dist'),
+        path: path.join(__dirname, 'dist'),
         filename: '[name].js',
         library: 'template',
         libraryTarget: 'umd'
@@ -14,10 +14,10 @@ module.exports = {
         rules: [{
             test: /\.art$/,
             use: [{
-                loader: 'art-template-loader',
+                loader: require.resolve('../'),
                 options: {
-                    root: path.resolve(__dirname, 'test', 'res'),
-                    imports: require.resolve('./test/template-imports'),
+                    root: path.resolve(__dirname, 'res'),
+                    imports: require.resolve('./template-imports'),
                     compressor: source => {
                         return source
                             // remove newline / carriage return

@@ -4,7 +4,7 @@
   "description": "art-template loader for webpack",
   "main": "src/index.js",
   "scripts": {
-    "test": "webpack && node test/dist/test.js"
+    "test": "webpack --config test/webpack.config.js && node test/dist/test.js"
   },
   "repository": {
     "type": "git",
