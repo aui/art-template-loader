@@ -5,6 +5,7 @@ const estraverse = require('estraverse');
 const loaderUtils = require('loader-utils');
 
 const loader = function (source) {
+    
     let render;
     this.cacheable && this.cacheable();
     const options = loaderUtils.getOptions(this);
@@ -16,8 +17,8 @@ const loader = function (source) {
     }, options);
 
     if (typeof config.imports !== 'string') {
-        throw Error(`art-template-loader: "options.imports" is a file path. Example:\n`
-        +`options: { imports: require.resolve("art-template/lib/imports") }\n`);
+        throw Error(`art-template-loader: "options.imports" is a file path. Example:\n` +
+            `options: { imports: require.resolve("art-template/lib/imports") }\n`);
     }
 
     const imports = 'var $imports = require(' +
@@ -43,11 +44,12 @@ const loader = function (source) {
                 node.id.type === 'Identifier' &&
                 node.id.name === 'include' &&
                 node.init.type === 'FunctionExpression') {
+
                 this.remove();
+
             } else if (node.type === 'CallExpression' &&
                 node.callee.type === 'Identifier' &&
                 node.callee.name === 'include') {
-                const filename = node.arguments[0].value;
 
                 const requireNode = {
                     "type": "AssignmentExpression",
@@ -64,26 +66,12 @@ const loader = function (source) {
                                 "type": "Identifier",
                                 "name": "require"
                             },
-                            "arguments": [{
-                                "type": "Literal",
-                                "value": filename
-                            }]
+                            "arguments": [node.arguments[0]]
                         }
                     }
                 };
 
-                requireNode.right.arguments = node.arguments[1] ? [{
-                    "type": "LogicalExpression",
-                    "left": {
-                        "type": "Identifier",
-                        "name": node.arguments[1].value
-                    },
-                    "operator": "||",
-                    "right": {
-                        "type": "Identifier",
-                        "name": "$data"
-                    }
-                }] : [{
+                requireNode.right.arguments = node.arguments[1] || [{
                     "type": "Identifier",
                     "name": "$data"
                 }];
@@ -96,7 +84,7 @@ const loader = function (source) {
 
     render = escodegen.generate(ast);
 
-    return `/*  */\n${imports};\nmodule.exports = ${render};`;
+    return `${imports};\nmodule.exports = ${render};`;
 };
 
 module.exports = loader;
