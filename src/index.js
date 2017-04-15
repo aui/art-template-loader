@@ -1,19 +1,21 @@
 const template = require('art-template');
+const path = require('path');
 const acorn = require('acorn');
 const escodegen = require('escodegen');
 const estraverse = require('estraverse');
 const loaderUtils = require('loader-utils');
 
 const loader = function (source) {
-    
+
     let render;
-    this.cacheable && this.cacheable();
-    const options = loaderUtils.getOptions(this);
+    const loader = this;
+    loader.cacheable && loader.cacheable();
+    const options = loaderUtils.getOptions(loader);
     const config = Object.assign({
         imports: 'art-template/lib/imports',
         bail: true,
         cache: null,
-        filename: this.resourcePath
+        filename: loader.resourcePath
     }, options);
 
     if (typeof config.imports !== 'string') {
@@ -22,7 +24,7 @@ const loader = function (source) {
     }
 
     const imports = 'var $imports = require(' +
-        loaderUtils.stringifyRequest(this, '!' + config.imports) +
+        loaderUtils.stringifyRequest(loader, '!' + config.imports) +
         ');';
 
     config.imports = require(config.imports);
@@ -32,7 +34,7 @@ const loader = function (source) {
     } catch (error) {
         delete error.stack;
         error = JSON.stringify(error, null, 4);
-        this.emitError(`${error}`);
+        loader.emitError(`${error}`);
         return;
     }
 
@@ -51,6 +53,20 @@ const loader = function (source) {
                 node.callee.type === 'Identifier' &&
                 node.callee.name === 'include') {
 
+                const filename = node.arguments[0];
+                const data = node.arguments[1] || {
+                    "type": "Identifier",
+                    "name": "$data"
+                };
+
+                if (config.root && filename.type === 'Literal' && /^[^\.]/.test(filename.value)) {
+                    const context = loader.context || (loader.options && loader.options.context);
+                    filename.value = path.resolve(config.root, filename.value);
+                    filename.value = './' + path.relative(context, filename.value);
+
+                    delete filename.raw;
+                }
+
                 const requireNode = {
                     "type": "AssignmentExpression",
                     "operator": "+=",
@@ -66,15 +82,11 @@ const loader = function (source) {
                                 "type": "Identifier",
                                 "name": "require"
                             },
-                            "arguments": [node.arguments[0]]
-                        }
+                            "arguments": [filename]
+                        },
+                        "arguments": [data]
                     }
                 };
-
-                requireNode.right.arguments = node.arguments[1] || [{
-                    "type": "Identifier",
-                    "name": "$data"
-                }];
 
 
                 return requireNode;

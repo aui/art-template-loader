@@ -1,4 +1,7 @@
 <!--template-->
+
+{{include './include.art'}}
+
 {{if user}}
   <h2>{{user.name}}</h2>
   <ul>
@@ -8,4 +11,8 @@
   </ul>
 {{/if}}
 
-{{include './include.art'}}
+<%
+  include('include.art', {
+    data: {}
+  });
+%>

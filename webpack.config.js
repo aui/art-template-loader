@@ -16,6 +16,7 @@ module.exports = {
             use: [{
                 loader: 'art-template-loader',
                 options: {
+                    root: path.resolve(__dirname, 'test', 'res'),
                     imports: require.resolve('./test/template-imports'),
                     compressor: source => {
                         return source
