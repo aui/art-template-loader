@@ -5,7 +5,7 @@
 ## Install
 
 ```
-npm install art-template-loader@0.3.0-beta1 --save-dev
+npm install art-template-loader@0.3.0-beta2 --save-dev
 ```
 
 ## Usage
