@@ -1,6 +1,6 @@
 {
   "name": "art-template-loader",
-  "version": "0.3.0-beta4",
+  "version": "0.3.0",
   "description": "art-template loader for webpack",
   "main": "src/index.js",
   "scripts": {
@@ -26,7 +26,7 @@
     "loader-utils": "^1.1.0"
   },
   "peerDependencies": {
-    "art-template": ">=4.0.0-beta4"
+    "art-template": ">=4.0.0-beta8"
   },
   "devDependencies": {
     "webpack": "^2.3.3"

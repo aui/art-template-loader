@@ -5,7 +5,7 @@
 ## Install
 
 ```
-npm install art-template-loader@0.3.0-beta4 --save-dev
+npm install art-template-loader --save-dev
 ```
 
 ## Usage
@@ -20,7 +20,7 @@ module.exports = {
         loader: "art-template-loader",
         options: {
           // art-template options (if necessary)
-          imports: require.resolve('./test/template-imports'),
+          imports: require.resolve('./template-imports'),
           compressor: source => {
               return source
                   // remove newline / carriage return
