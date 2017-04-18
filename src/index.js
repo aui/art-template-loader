@@ -39,57 +39,100 @@ const loader = function (source) {
     }
 
     let ast = acorn.parse(`(${render})`);
+    let extendNode = null;
+    const functions = [`include`, `extend`, `$$layout`, `$include`];
 
     ast = estraverse.replace(ast, {
         enter: function (node) {
             if (node.type === 'VariableDeclarator' &&
-                node.id.type === 'Identifier' &&
-                node.id.name === 'include' &&
-                node.init.type === 'FunctionExpression') {
+                functions.includes(node.id.name)) {
 
                 this.remove();
 
             } else if (node.type === 'CallExpression' &&
                 node.callee.type === 'Identifier' &&
-                node.callee.name === 'include') {
+                functions.includes(node.callee.name)) {
 
-                const filename = node.arguments[0];
-                const data = node.arguments[1] || {
-                    "type": "Identifier",
-                    "name": "$data"
-                };
+                switch (node.callee.name) {
 
-                if (config.root && filename.type === 'Literal' && /^[^\.]/.test(filename.value)) {
-                    const context = loader.context || (loader.options && loader.options.context);
-                    filename.value = path.resolve(config.root, filename.value);
-                    filename.value = './' + path.relative(context, filename.value);
+                    case `extend`:
 
-                    delete filename.raw;
-                }
+                        extendNode = node.arguments[0];
 
-                const requireNode = {
-                    "type": "AssignmentExpression",
-                    "operator": "+=",
-                    "left": {
-                        "type": "Identifier",
-                        "name": "$out"
-                    },
-                    "right": {
-                        "type": "CallExpression",
-                        "callee": {
+                        return {
+                            "type": "AssignmentExpression",
+                            "operator": "=",
+                            "left": {
+                                "type": "Identifier",
+                                "name": "$$extend"
+                            },
+                            "right": extendNode
+                        };
+
+                    case `$$layout`:
+                        return {
                             "type": "CallExpression",
                             "callee": {
-                                "type": "Identifier",
-                                "name": "require"
+                                "type": "CallExpression",
+                                "callee": {
+                                    "type": "Identifier",
+                                    "name": "require"
+                                },
+                                "arguments": [extendNode]
                             },
-                            "arguments": [filename]
-                        },
-                        "arguments": [data]
-                    }
-                };
+                            "arguments": [{
+                                    "type": "Identifier",
+                                    "name": "$data"
+                                },
+                                {
+                                    "type": "Identifier",
+                                    "name": "$$block"
+                                }
+                            ]
+                        };
+
+                    case `include`:
+
+                        const filenameNode = node.arguments[0];
+                        const dataNode = node.arguments[1] || {
+                            "type": "Identifier",
+                            "name": "$data"
+                        };
+
+                        if (config.root && filenameNode.type === 'Literal' && /^[^\.]/.test(filenameNode.value)) {
+                            const context = loader.context || (loader.options && loader.options.context);
+                            filenameNode.value = path.resolve(config.root, filenameNode.value);
+                            filenameNode.value = './' + path.relative(context, filenameNode.value);
+
+                            delete filenameNode.raw;
+                        }
+
+                        const requireNode = {
+                            "type": "AssignmentExpression",
+                            "operator": "+=",
+                            "left": {
+                                "type": "Identifier",
+                                "name": "$$out"
+                            },
+                            "right": {
+                                "type": "CallExpression",
+                                "callee": {
+                                    "type": "CallExpression",
+                                    "callee": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [filenameNode]
+                                },
+                                "arguments": [dataNode]
+                            }
+                        };
 
 
-                return requireNode;
+                        return requireNode;
+                }
+
+
             }
         }
     });

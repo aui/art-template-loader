@@ -2,13 +2,14 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        'test': path.join(__dirname, 'index.js')
+        'include': path.join(__dirname, 'include', 'index.js'),
+        'layout': path.join(__dirname, 'layout', 'index.js')
     },
     output: {
         path: path.join(__dirname, 'dist'),
         filename: '[name].js',
         library: 'template',
-        libraryTarget: 'umd'
+        libraryTarget: 'commonjs2'
     },
     module: {
         rules: [{
