@@ -16,37 +16,18 @@ npm install art-template-loader --save-dev
 
 ```javascript
 module.exports = {
-  // ...
-  module: {
-    rules: [
-      {
-        test: /\.art$/,
-        loader: "art-template-loader",
-        options: {
-          // art-template options (if necessary)
-          imports: require.resolve('./template-imports'),
-          compressor: source => {
-              return source
-                  // remove newline / carriage return
-                  .replace(/\n/g, "")
-
-                  // remove whitespace (space and tabs) before tags
-                  .replace(/[\t ]+\</g, "<")
-
-                  // remove whitespace between tags
-                  .replace(/\>[\t ]+\</g, "><")
-
-                  // remove whitespace after tags
-                  .replace(/\>[\t ]+$/g, ">")
-                  
-                  // remove comments
-                  .replace(/<!--[\w\W]*?-->/g, "");
-          }
-        }
-      },
-    ],
-  },
-  // ...
+    // ...
+    module: {
+        rules: [{
+            test: /\.art$/,
+            loader: "art-template-loader",
+            options: {
+                // art-template options (if necessary)
+                //imports: require.resolve('./template-imports')
+            }
+        }],
+    },
+    // ...
 }
 ```
 
