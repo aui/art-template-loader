@@ -23,7 +23,7 @@ module.exports = {
             loader: "art-template-loader",
             options: {
                 // art-template options (if necessary)
-                //imports: require.resolve('./template-imports')
+                // imports: require.resolve('./template-imports')
             }
         }],
     },
