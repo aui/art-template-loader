@@ -1,6 +1,6 @@
-const render = require('./index.art'); 
+const render = require('./index.art');
 const data = {
-    parent: '<style>#example{}</style>\n'
+    title: 'My Page'
 };
 const html = render(data);
 console.log(html);

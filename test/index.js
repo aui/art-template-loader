@@ -6,11 +6,11 @@ module.exports = {
         'render': () => {
             const render = require('../example/dist/include');
             const data = {
-                parent: '<style>#example{}</style>\n'
+                title: 'My Page'
             };
             const result = render(data);
-            assert.equal(true, result.indexOf('<title>My Page</title>') > -1);
-            assert.equal(true, result.indexOf('<style>#example{}</style>') > -1);
+            assert.equal(true, result.indexOf('<h1>My Page</h1>') > -1);
+            assert.equal(true, result.indexOf('</footer>') > -1);
         }
     },
 
@@ -18,11 +18,12 @@ module.exports = {
         'render': ()=>{
             const render = require('../example/dist/layout');
             const data = {
-                parent: '<style>#example{}</style>\n'
+                title: 'My Page'
             };
-            const result = render(data);
+            const result = render(data)
             assert.equal(true, result.indexOf('<title>My Page</title>') > -1);
-            assert.equal(true, result.indexOf('<style>#example{}</style>') > -1);
+            assert.equal(true, result.indexOf('</head>') > -1);
+            assert.equal(false, /<\/html>.+/.test(result));
         }
     }
 
