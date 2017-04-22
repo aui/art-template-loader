@@ -33,9 +33,13 @@ module.exports = {
 
 ## Debug
 
+Support `SourceMap`:
+
 ```shell
 webpack --debug
 ```
+
+![debug](https://cloud.githubusercontent.com/assets/1791748/25306107/55b2afba-27b9-11e7-903b-4700ac47a4d3.png)
 
 ## Options
 
