@@ -14,7 +14,7 @@ npm install art-template-loader --save-dev
 
 ## Usage
 
-```javascript
+```js
 module.exports = {
     // ...
     module: {
@@ -29,6 +29,12 @@ module.exports = {
     },
     // ...
 }
+```
+
+## Debug
+
+```shell
+webpack --debug
 ```
 
 ## Options

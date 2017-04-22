@@ -1,7 +1,5 @@
-const imports = require('art-template/lib/template-imports');
+const imports = require('art-template/lib/imports');
 
-imports.$include = function(){
-    return '{{include}}';
-};
+imports.$console = console;
 
 module.exports = imports;

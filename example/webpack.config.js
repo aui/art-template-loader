@@ -5,11 +5,12 @@ module.exports = {
         'include': path.join(__dirname, 'include', 'index.js'),
         'layout': path.join(__dirname, 'layout', 'index.js')
     },
+    devtool: 'source-map',
     output: {
         path: path.join(__dirname, 'dist'),
         filename: '[name].js',
         library: 'template',
-        libraryTarget: 'commonjs2'
+        libraryTarget: 'umd'
     },
     module: {
         rules: [{

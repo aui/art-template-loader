@@ -1,39 +1,47 @@
-const template = require('art-template');
+const precompile = require('art-template/lib/precompile');
 const loaderUtils = require('loader-utils');
 
 const loader = function (source) {
 
-    let render;
-    const loader = this;
+    this.cacheable && this.cacheable();
 
-    loader.cacheable && loader.cacheable();
+    let result;
+    const options = loaderUtils.getOptions(this);
+    const callback = this.callback;
 
-    const options = loaderUtils.getOptions(loader);
-    options.filename = loader.resourcePath;
+    options.source = source;
+    options.filename = this.resourcePath;
+    options.sourceMap = this.sourceMap;
+    options.sourceRoot = process.cwd();
 
 
-    if (loader.debug) {
-        options.compileDebug = true;
+    if (options.debug === undefined) {
+        options.debug = this.debug;
     }
 
 
-    if (loader.minimize) {
-        options.minimize = true;
+    if (options.minimize === undefined) {
+        options.minimize = this.minimize;
     }
 
 
     try {
-        render = template.precompile(source, options);
+        result = precompile(options);
     } catch (error) {
-        delete error.stack;
-        error = JSON.stringify(error, null, 4);
-
-        loader.emitError(`art-template-loader: ${error}`);
-
-        return `console.error('Template Error: ' + ${error});\nmodule.exports = function(){return '{Template Error}'};`;
+        callback(new Error(JSON.stringify(error, null, 4)), `module.exports=function(){}`);
+        return;
     }
 
-    return render;
+
+    const code = result.toString();
+    const sourceMap = result.sourceMap;
+    const ast = result.ast;
+
+    if (sourceMap && (!sourceMap.sourcesContent || !sourceMap.sourcesContent.length)) {
+        sourceMap.sourcesContent = [source];
+    }
+
+    callback(null, code, sourceMap, ast);
 };
 
 module.exports = loader;
