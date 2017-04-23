@@ -28,7 +28,8 @@ const loader = function (source) {
     try {
         result = precompile(options);
     } catch (error) {
-        callback(new Error(JSON.stringify(error, null, 4)), `module.exports=function(){}`);
+        delete error.stack; // 这样才能打印 art-template 调试信息
+        callback(error);
         return;
     }
 

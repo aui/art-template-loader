@@ -18,7 +18,7 @@ module.exports = {
             use: [{
                 loader: require.resolve('../'),
                 options: {
-                    root: path.resolve(__dirname, 'res'),
+                    root: path.resolve(__dirname),
                     imports: require.resolve('./template-imports')
                 }
             }]
