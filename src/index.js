@@ -6,7 +6,7 @@ const loader = function (source) {
     this.cacheable && this.cacheable();
 
     let result;
-    const options = loaderUtils.getOptions(this);
+    const options = loaderUtils.getOptions(this) || {};
     const callback = this.callback;
 
     options.source = source;
