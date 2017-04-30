@@ -1,48 +1,125 @@
+const template = require('art-template/lib/template-node');
 const precompile = require('art-template/lib/precompile');
 const loaderUtils = require('loader-utils');
+const attrParse = require('./attributes-parser');
+const url = require('url');
+const randomIdent = () => {
+	return 'xxxHTMLLINKxxx' + Math.random() + Math.random() + 'xxx';
+}
 
-const loader = function (source) {
+const openTag = `{{art-template-loader}}`;
+const closeTag = `{{/art-template-loader}}`;
+template.defaults.rules.unshift({
+	test: new RegExp(openTag + '(.*?)' + closeTag),
+	use: (match, code) => {
+		return {
+			output: 'raw',
+			code
+		}
+	}
+});
 
-    this.cacheable && this.cacheable();
+const loader = function(source) {
 
-    let result;
-    const options = loaderUtils.getOptions(this) || {};
-    const callback = this.callback;
+	this.cacheable && this.cacheable();
 
-    options.source = source;
-    options.filename = this.resourcePath;
-    options.sourceMap = this.sourceMap;
-    options.sourceRoot = process.cwd();
+	let result;
+	let attributes = ['img:src'];
+    // htmlAttrs, htmlResourceRoot
+	let options = loaderUtils.getOptions(this) || {};
+	const callback = this.callback;
 
+	if(options.debug === undefined) {
+		options.debug = this.debug;
+	}
 
-    if (options.debug === undefined) {
-        options.debug = this.debug;
-    }
+	if(options.minimize === undefined) {
+		options.minimize = this.minimize;
+	}
 
+	if(options.htmlAttrs !== undefined) {
+		if(typeof options.htmlAttrs === `string`) {
+			attributes = options.htmlAttrs.split(` `);
+		} else if(Array.isArray(options.htmlAttrs)) {
+			attributes = options.htmlAttrs;
+		} else if(options.htmlAttrs === false) {
+			attributes = [];
+		} else {
+			throw new Error(`Invalid value to options parameter htmlAttrs`);
+		}
+	}
 
-    if (options.minimize === undefined) {
-        options.minimize = this.minimize;
-    }
+	options = template.defaults.$extend(options);
+	const htmlResourceRoot = options.htmlResourceRoot;
+	const links = attrParse(source, function(tag, attr) {
+		return attributes.indexOf(tag + ":" + attr) >= 0;
+	});
 
+	links.reverse();
 
-    try {
-        result = precompile(options);
-    } catch (error) {
-        delete error.stack; // 这样才能打印 art-template 调试信息
-        callback(error);
-        return;
-    }
+	const data = {};
+	source = [source];
+	links.forEach(function(link) {
+		if(!loaderUtils.isUrlRequest(link.value, htmlResourceRoot)) {
+			return
+		};
 
+		let ident;
+		const uri = url.parse(link.value);
+		if(uri.hash !== null && uri.hash !== undefined) {
+			uri.hash = null;
+			link.value = uri.format();
+			link.length = link.value.length;
+		}
 
-    const code = result.toString();
-    const sourceMap = result.sourceMap;
-    const ast = result.ast;
+		do {
+			ident = randomIdent();
+		} while (data[ident]);
 
-    if (sourceMap && (!sourceMap.sourcesContent || !sourceMap.sourcesContent.length)) {
-        sourceMap.sourcesContent = [source];
-    }
+		data[ident] = link.value;
+		const x = source.pop();
+		source.push(x.substr(link.start + link.length));
+		source.push(ident);
+		source.push(x.substr(0, link.start));
+	});
+	source.reverse();
+	source = source.join(``);
+	source = source.replace(/xxxHTMLLINKxxx[0-9\.]+xxx/g, match => {
+		if(!data[match]) {
+			return match
+		};
+		return openTag + 'require(' + JSON.stringify(loaderUtils.urlToRequest(data[match], htmlResourceRoot)) + ')' + closeTag;
+	});
 
-    callback(null, code, sourceMap, ast);
+	// use mocha
+	if(loader.__returnString) {
+		return source;
+	}
+
+	options.source = source;
+	options.filename = this.resourcePath;
+	options.sourceMap = this.sourceMap;
+	options.sourceRoot = process.cwd();
+	options.ignore = options.ignore || [];
+	options.ignore.push(`require`);
+
+	try {
+		result = precompile(options);
+	} catch(error) {
+		delete error.stack; // 这样才能打印 art-template 调试信息
+		callback(error);
+		return;
+	}
+
+	const code = result.toString();
+	const sourceMap = result.sourceMap;
+	const ast = result.ast;
+
+	if(sourceMap && (!sourceMap.sourcesContent || !sourceMap.sourcesContent.length)) {
+		sourceMap.sourcesContent = [source];
+	}
+
+	callback(null, code, sourceMap, ast);
 };
 
 module.exports = loader;

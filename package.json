@@ -4,8 +4,11 @@
   "description": "art-template loader for webpack",
   "main": "src/index.js",
   "scripts": {
-    "example": "webpack --config example/webpack.config.js",
-    "test": "npm run example && mocha --ui exports 'test/**/*.js'"
+    "test": "mocha --harmony --full-trace --check-leaks",
+    "travis": "npm run cover -- --report lcovonly",
+    "postcover": "npm run lint && npm run beautify-lint",
+    "cover": "istanbul cover -x *.runtime.js node_modules/mocha/bin/_mocha",
+    "publish-patch": "mocha && npm version patch && git push && git push --tags && npm publish"
   },
   "repository": {
     "type": "git",
@@ -24,10 +27,19 @@
     "acorn": "^5.0.3",
     "escodegen": "^1.8.1",
     "estraverse": "^4.2.0",
-    "loader-utils": "^1.1.0"
+    "fastparse": "^1.1.1",
+    "html-minifier": "^3.4.3",
+    "loader-utils": "^1.1.0",
+    "beautify-lint": "^1.0.4",
+    "codecov.io": "^0.1.6",
+    "eslint": "^3.1.1",
+    "istanbul": "^0.4.4",
+    "js-beautify": "^1.6.3",
+    "mocha": "^2.5.3",
+    "should": "^10.0.0"
   },
   "peerDependencies": {
-    "art-template": ">=4.4.1"
+    "art-template": ">=4.6.0"
   },
   "devDependencies": {
     "mocha": "^3.2.0",
