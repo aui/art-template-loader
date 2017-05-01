@@ -7,10 +7,10 @@ const precompile = require('art-template/lib/precompile');
 const loader = function (source) {
 
 	let result;
-	const callback = this.callback;
 	let options = loaderUtils.getOptions(this) || {};
 	let htmlResourceRules = [/\bsrc="([^"]*)"/];
 	const htmlResourceRoot = options.htmlResourceRoot;
+	const callback = this.callback;
 	const use = (match, url) => {
 		let code;
 		const output = 'raw';
