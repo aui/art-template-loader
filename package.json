@@ -21,15 +21,13 @@
     "node": ">= 4.0.0"
   },
   "dependencies": {
-    "acorn": "^5.0.3",
-    "escodegen": "^1.8.1",
-    "estraverse": "^4.2.0",
     "loader-utils": "^1.1.0"
   },
   "peerDependencies": {
-    "art-template": ">=4.4.1"
+    "art-template": ">=4.7.0"
   },
   "devDependencies": {
+    "file-loader": "^0.11.1",
     "mocha": "^3.2.0",
     "webpack": "^2.3.3"
   }
