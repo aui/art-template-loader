@@ -1,8 +1,6 @@
-<%
-   include('./header.art', {
+<% include('./header.art', {
       title: title
-   })
-%>
+}) %>
 
 <p><img src="./octocat.png" alt="octocat"></p>
 <p>This is just an awesome page.</p>
