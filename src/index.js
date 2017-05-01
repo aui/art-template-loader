@@ -7,14 +7,14 @@ const randomIdent = () => {
 	return 'xxxHTMLLINKxxx' + Math.random() + Math.random() + 'xxx';
 }
 
-const openTag = `{{art-template-loader}}`;
-const closeTag = `{{/art-template-loader}}`;
+const openTag = `\x02\x02`;
+const closeTag = `\x03\x03`;
 template.defaults.rules.unshift({
 	test: new RegExp(openTag + '(.*?)' + closeTag),
 	use: (match, code) => {
 		return {
 			output: 'raw',
-			code
+			code: `require(${JSON.stringify(code)})`
 		}
 	}
 });
@@ -66,6 +66,7 @@ const loader = function(source) {
 
 		let ident;
 		const uri = url.parse(link.value);
+
 		if(uri.hash !== null && uri.hash !== undefined) {
 			uri.hash = null;
 			link.value = uri.format();
@@ -88,7 +89,7 @@ const loader = function(source) {
 		if(!data[match]) {
 			return match
 		};
-		return openTag + 'require(' + JSON.stringify(loaderUtils.urlToRequest(data[match], htmlResourceRoot)) + ')' + closeTag;
+		return openTag + loaderUtils.urlToRequest(data[match], htmlResourceRoot) + closeTag;
 	});
 
 	// use mocha
