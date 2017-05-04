@@ -1,2 +1,2 @@
 {{time | dateFormat:'yyyy年 MM月 dd日 hh:mm:ss'}}
-{{3.14 | parseFloat}}
+{{3.14 | parseInt}}
