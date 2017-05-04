@@ -37,7 +37,7 @@ module.exports = {
             loader: "art-template-loader",
             options: {
                 // art-template options (if necessary)
-                imports: require.resolve("./template-runtime")
+                // @see https://github.com/aui/art-template
             }
         }]
     },
@@ -81,6 +81,22 @@ require("html-loader!./file.art");
 require("html-loader?htmlResourceRoot=.!./file.art");
 
 // => '<img  src="http://cdn.example.com/49eba9f/a992ca.jpg">'
+```
+
+## Filter
+
+Add filter:
+
+```js
+var runtime = require('art-template/lib/runtime');
+runtime.dateFormat = function(){ /*[...]*/ };
+var html = require('./index.art');
+```
+
+Use filter:
+
+```html
+{{time | dateFormat 'yyyy-MM-dd hh:mm:ss'}}
 ```
 
 ## Debug

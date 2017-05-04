@@ -3,7 +3,8 @@ const path = require('path');
 module.exports = {
 	entry: {
 		'include': path.join(__dirname, 'include', 'index.js'),
-		'layout': path.join(__dirname, 'layout', 'index.js')
+		'layout': path.join(__dirname, 'layout', 'index.js'),
+		'filter': path.join(__dirname, 'filter', 'index.js')
 	},
 	devtool: 'source-map',
 	output: {
@@ -21,8 +22,7 @@ module.exports = {
 			use: [{
 				loader: require.resolve('../'),
 				options: {
-					root: path.resolve(__dirname),
-					imports: require.resolve('./template-runtime')
+					root: path.resolve(__dirname)
 				}
 			}]
 		}]
