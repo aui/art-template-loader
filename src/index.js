@@ -21,7 +21,7 @@ const loader = function (source) {
 			const codes = [attr[0], urlRequest, attr[1]].map(JSON.stringify);
 			code = codes[0] + `+require(${codes[1]})+` + codes[2];
 		} else {
-			code = match;
+			code = JSON.stringify(match);
 		}
 
 		return {
