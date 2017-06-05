@@ -22,6 +22,7 @@ module.exports = {
 			use: [{
 				loader: require.resolve('../'),
 				options: {
+					htmlResourceRoot: __dirname,
 					root: path.resolve(__dirname)
 				}
 			}]

@@ -24,7 +24,7 @@
     "loader-utils": "^1.1.0"
   },
   "peerDependencies": {
-    "art-template": ">=4.8.1"
+    "art-template": ">=4.10.0"
   },
   "devDependencies": {
     "file-loader": "^0.11.1",

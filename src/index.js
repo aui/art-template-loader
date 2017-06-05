@@ -14,6 +14,7 @@ const loader = function (source) {
 	const use = (match, url) => {
 		let code;
 		const output = 'raw';
+		match = match.toString();
 
 		if (loaderUtils.isUrlRequest(url, htmlResourceRoot)) {
 			const urlRequest = loaderUtils.urlToRequest(url, htmlResourceRoot);
@@ -78,7 +79,6 @@ const loader = function (source) {
 	try {
 		result = precompile(options);
 	} catch (error) {
-		delete error.stack; // 这样才能打印 art-template 调试信息
 		callback(error);
 		return;
 	}

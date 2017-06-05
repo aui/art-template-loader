@@ -5,4 +5,8 @@ const data = {
 const html = render(data);
 console.log(html);
 
+if (typeof document === 'object') {
+    document.body.innerHTML = html;
+}
+
 module.exports = render;
