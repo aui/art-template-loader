@@ -1,6 +1,6 @@
 {
   "name": "art-template-loader",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "art-template loader for webpack",
   "main": "src/index.js",
   "scripts": {
